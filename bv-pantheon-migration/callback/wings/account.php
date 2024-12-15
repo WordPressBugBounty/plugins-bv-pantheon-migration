@@ -47,22 +47,22 @@ class BVAccountCallback extends BVCallbackBase {
 		$settings = $this->settings;
 		switch ($request->method) {
 		case "addacc":
-			PTNAccount::addAccount($this->settings, $params['public'], $params['secret']);
-			$resp = array("status" => PTNAccount::exists($this->settings, $params['public']));
+			PTNAccount::addAccount($settings, $params['public'], $params['secret']);
+			$resp = array("status" => PTNAccount::exists($settings, $params['public']));
 			break;
 		case "rmacc":
-			$resp = array("status" => PTNAccount::remove($this->settings, $params['public']));
+			$resp = array("status" => PTNAccount::remove($settings, $params['public']));
 			break;
 		case "updt":
 			$account->updateInfo($params);
-			$resp = array("status" => PTNAccount::exists($this->settings, $params['pubkey']));
+			$resp = array("status" => PTNAccount::exists($settings, $params['pubkey']));
 			break;
 		case "updtapikey":
-			PTNAccount::updateApiPublicKey($this->settings, $params['pubkey']);
-			$resp = array("status" => $this->settings->getOption(PTNAccount::$api_public_key));
+			PTNAccount::updateApiPublicKey($settings, $params['pubkey']);
+			$resp = array("status" => $settings->getOption(PTNAccount::$api_public_key));
 			break;
 		case "rmbvscrt":
-			$resp = array("status" => $settings->deleteOption('bvSecretKey'));
+			$resp = array("status" => PTNRecover::deleteDefaultSecret($settings));
 			break;
 		case "rmbvkeys":
 			$resp = array("status" => $settings->deleteOption('bvKeys'));
@@ -74,7 +74,7 @@ class BVAccountCallback extends BVCallbackBase {
 			$resp = array("status" => $settings->deleteOption('bvAccounts'));
 			break;
 		case "fetch":
-			$accounts = PTNAccount::allAccounts($this->settings);
+			$accounts = PTNAccount::allAccounts($settings);
 			if (!isset($params['full'])) {
 				foreach ($accounts as &$account) {
 					if (isset($account['secret'])) {

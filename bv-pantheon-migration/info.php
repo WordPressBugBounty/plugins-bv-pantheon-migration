@@ -10,7 +10,8 @@ if (!class_exists('PTNInfo')) :
 		public $badgeinfo = 'ptnbadge';
 		public $ip_header_option = 'ptnipheader';
 		public $brand_option = 'ptnbrand';
-		public $version = '5.56';
+		public $wp_lp_whitelabel_option = 'ptnLpWhitelabelConf';
+		public $version = '5.88';
 		public $webpage = 'https://pantheon.io';
 		public $appurl = 'https://migrate.blogvault.net';
 		public $slug = 'bv-pantheon-migration/pantheon.php';
@@ -21,7 +22,8 @@ if (!class_exists('PTNInfo')) :
 		public $author = 'Pantheon';
 		public $title = 'Pantheon Migration';
 
-		const DB_VERSION = '4';
+		const DB_VERSION = '5';
+		const AL_CONF_VERSION = '1.1';
 
 		public function __construct($settings) {
 			$this->settings = $settings;
@@ -60,7 +62,10 @@ if (!class_exists('PTNInfo')) :
 		public function getConnectionKey() {
 			require_once dirname( __FILE__ ) . '/recover.php';
 			$bvsiteinfo = new PTNWPSiteInfo();
-			return base64_encode(PTNRecover::defaultSecret($this->settings).":".$bvsiteinfo->siteurl());
+			$encoded_url = base64_encode($bvsiteinfo->siteurl());
+			$secret = PTNRecover::defaultSecret($this->settings);
+
+			return base64_encode("v2:".$secret.":".$encoded_url.":".$this->plugname);
 		}
 
 		public function getDefaultSecret() {
@@ -82,7 +87,7 @@ if (!class_exists('PTNInfo')) :
 
 		public static function getRequestID() {
 			if (!defined("BV_REQUEST_ID")) {
-				define("BV_REQUEST_ID", uniqid(mt_rand()));
+				define("BV_REQUEST_ID", uniqid(mt_rand())); // phpcs:ignore WordPress.WP.AlternativeFunctions.rand_mt_rand
 			}
 			return BV_REQUEST_ID;
 		}
@@ -103,6 +108,7 @@ if (!class_exists('PTNInfo')) :
 		}
 
 		public function canWhiteLabel($slug = NULL) {
+			// phpcs:disable WordPress.Security.NonceVerification.Recommended
 			if (array_key_exists("bv_override_global_whitelabel", $_REQUEST)) {
 				return false;
 			}
@@ -110,6 +116,7 @@ if (!class_exists('PTNInfo')) :
 				$_REQUEST["bv_override_plugin_whitelabel"] === $slug) {
 				return false;
 			}
+			// phpcs:enable WordPress.Security.NonceVerification.Recommended
 			return true;
 		}
 
@@ -131,6 +138,11 @@ if (!class_exists('PTNInfo')) :
 		public function getPluginsWhitelabelInfos() {
 			$whitelabel_infos = $this->settings->getOption($this->brand_option);
 			return is_array($whitelabel_infos) ? $whitelabel_infos : array();
+		}
+
+		public function getLPWhitelabelInfo() {
+			$infos = $this->settings->getOption($this->wp_lp_whitelabel_option);
+			return is_array($infos) ? $infos : array();
 		}
 
 		public function getPluginsWhitelabelInfoByTitle() {

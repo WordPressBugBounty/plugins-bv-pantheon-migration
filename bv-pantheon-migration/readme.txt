@@ -4,7 +4,7 @@ Tags: pantheon, migration
 Requires at least: 4.0
 Tested up to: 6.7
 Requires PHP: 5.6.0
-Stable tag: 5.56
+Stable tag: 5.88
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -79,6 +79,10 @@ No, that's the beauty of this plugin. It runs on a SAAS based technology and a s
 2. Adding information to the Pantheon Migrations plugin
 
 == Changelog ==
+= 5.88 =
+* Tweak: Code Restructuring
+* Tweak: Added support for PHP 8.4
+
 = 5.56 =
 * Better handling for Activate Redirect
 
