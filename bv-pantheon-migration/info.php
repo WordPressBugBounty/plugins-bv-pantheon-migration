@@ -11,7 +11,7 @@ if (!class_exists('PTNInfo')) :
 		public $ip_header_option = 'ptnipheader';
 		public $brand_option = 'ptnbrand';
 		public $wp_lp_whitelabel_option = 'ptnLpWhitelabelConf';
-		public $version = '5.88';
+		public $version = '6.65';
 		public $webpage = 'https://pantheon.io';
 		public $appurl = 'https://migrate.blogvault.net';
 		public $slug = 'bv-pantheon-migration/pantheon.php';
@@ -64,14 +64,15 @@ if (!class_exists('PTNInfo')) :
 			$bvsiteinfo = new PTNWPSiteInfo();
 			$encoded_url = base64_encode($bvsiteinfo->siteurl());
 			$secret = PTNRecover::defaultSecret($this->settings);
+			$tag = PTNRecover::connectionTag($this->settings);
 
-			return base64_encode("v2:".$secret.":".$encoded_url.":".$this->plugname);
-		}
+			#No tag means this site has no salt material in wp-config.php, and there
+			#is no connection key that would be safe to hand out.
+			if (empty($secret) || empty($tag)) {
+				return null;
+			}
 
-		public function getDefaultSecret() {
-			require_once dirname( __FILE__ ) . '/recover.php';
-			$bvsiteinfo = new PTNWPSiteInfo();
-			return PTNRecover::defaultSecret($this->settings);
+			return base64_encode("v3:".$secret.":".$encoded_url.":".$this->plugname.":".$tag);
 		}
 
 		public function getLatestElementorDBVersion($file) {
@@ -86,25 +87,10 @@ if (!class_exists('PTNInfo')) :
 		}
 
 		public static function getRequestID() {
-			if (!defined("BV_REQUEST_ID")) {
-				define("BV_REQUEST_ID", uniqid(mt_rand())); // phpcs:ignore WordPress.WP.AlternativeFunctions.rand_mt_rand
+			if (!defined("PTN_REQUEST_ID")) {
+				define("PTN_REQUEST_ID", uniqid(mt_rand())); // phpcs:ignore WordPress.WP.AlternativeFunctions.rand_mt_rand
 			}
-			return BV_REQUEST_ID;
-		}
-
-		public function canSetCWBranding() {
-			if (PTNWPSiteInfo::isCWServer()) {
-
-				$bot_protect_accounts = PTNAccount::accountsByType($this->settings, 'botprotect');
-				if (sizeof($bot_protect_accounts) >= 1)
-					return true;
-
-				$bot_protect_accounts = PTNAccount::accountsByPattern($this->settings, 'email', '/@cw_user\.com$/');
-				if (sizeof($bot_protect_accounts) >= 1)
-					return true;
-			}
-
-			return false;
+			return PTN_REQUEST_ID;
 		}
 
 		public function canWhiteLabel($slug = NULL) {
@@ -162,7 +148,6 @@ if (!class_exists('PTNInfo')) :
 			if (is_array($brand) && array_key_exists('menuname', $brand)) {
 				return $brand['menuname'];
 			}
-		  
 			return $this->brandname;
 		}
 

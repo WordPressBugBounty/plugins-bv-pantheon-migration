@@ -1,10 +1,10 @@
 === Pantheon Migrations ===
-Contributors: akshatc, getpantheon
+Contributors: akshatc, blogvault, getpantheon
 Tags: pantheon, migration
 Requires at least: 4.0
-Tested up to: 7.0 
-Requires PHP: 5.6.0
-Stable tag: 5.88
+Tested up to: 7.1
+Requires PHP: 7.0
+Stable tag: 6.65
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -79,6 +79,16 @@ No, that's the beauty of this plugin. It runs on a SAAS based technology and a s
 2. Adding information to the Pantheon Migrations plugin
 
 == Changelog ==
+= 6.65 =
+* Improvement: Strengthened secret generation using cryptographically secure randomness.
+* Improvement: Strengthened connection key generation and authentication.
+* Improvement: Optimized migration of large database tables.
+* Tweak: Improved file uploads and added batched filesystem operations.
+* Tweak: Improved validation for streamed callbacks.
+* Compatibility: Minimum supported PHP version is now 7.0.
+* Tweak: Improvements in fetching File Stats.
+* Tweak: Code Restructuring.
+
 = 5.88 =
 * Tweak: Code Restructuring
 * Tweak: Added support for PHP 8.4
