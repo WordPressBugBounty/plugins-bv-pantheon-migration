@@ -11,7 +11,7 @@ if (!class_exists('PTNInfo')) :
 		public $ip_header_option = 'ptnipheader';
 		public $brand_option = 'ptnbrand';
 		public $wp_lp_whitelabel_option = 'ptnLpWhitelabelConf';
-		public $version = '6.65';
+		public $version = '6.72';
 		public $webpage = 'https://pantheon.io';
 		public $appurl = 'https://migrate.blogvault.net';
 		public $slug = 'bv-pantheon-migration/pantheon.php';

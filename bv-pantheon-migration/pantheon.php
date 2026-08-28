@@ -5,7 +5,7 @@ Plugin URI: https://pantheon.io
 Description: The easiest way to migrate your site to Pantheon
 Author: Pantheon
 Author URI: https://pantheon.io
-Version: 6.65
+Version: 6.72
 Network: True
 License: GPLv2 or later
 License URI: [http://www.gnu.org/licenses/gpl-2.0.html](http://www.gnu.org/licenses/gpl-2.0.html)

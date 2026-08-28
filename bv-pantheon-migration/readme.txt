@@ -4,7 +4,7 @@ Tags: pantheon, migration
 Requires at least: 4.0
 Tested up to: 7.1
 Requires PHP: 7.0
-Stable tag: 6.65
+Stable tag: 6.72
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -79,6 +79,9 @@ No, that's the beauty of this plugin. It runs on a SAAS based technology and a s
 2. Adding information to the Pantheon Migrations plugin
 
 == Changelog ==
+= 6.72 =
+* Tweak: Added validation checks for input params.
+
 = 6.65 =
 * Improvement: Strengthened secret generation using cryptographically secure randomness.
 * Improvement: Strengthened connection key generation and authentication.
